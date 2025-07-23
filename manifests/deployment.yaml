@@ -1,0 +1,62 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: job-ttl-system
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: job-ttl-webhook-service
+  namespace: job-ttl-system
+spec:
+  selector:
+    app: job-ttl-controller
+  ports:
+    - port: 443
+      targetPort: 9443
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: job-ttl-controller
+  namespace: job-ttl-system
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: job-ttl-controller
+  template:
+    metadata:
+      labels:
+        app: job-ttl-controller
+    spec:
+      containers:
+      - name: manager
+        image: jobttlcontroller:latest
+        imagePullPolicy: IfNotPresent
+        command:
+        - /manager
+        args:
+        - --target-ttl=100
+        - --label-selector=ttl-controller=enabled
+        ports:
+        - containerPort: 9443
+          name: webhook-server
+          protocol: TCP
+        volumeMounts:
+        - mountPath: /tmp/k8s-webhook-server/serving-certs
+          name: cert
+          readOnly: true
+        resources:
+          limits:
+            cpu: 100m
+            memory: 128Mi
+          requests:
+            cpu: 100m
+            memory: 64Mi
+      volumes:
+      - name: cert
+        secret:
+          defaultMode: 420
+          secretName: webhook-server-cert
+      terminationGracePeriodSeconds: 10

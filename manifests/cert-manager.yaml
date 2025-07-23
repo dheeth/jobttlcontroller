@@ -1,0 +1,26 @@
+# This manifest is for cert-manager integration
+# Install cert-manager first: kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.13.0/cert-manager.yaml
+
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: job-ttl-webhook-server-cert
+  namespace: job-ttl-system
+spec:
+  dnsNames:
+  - job-ttl-webhook-service
+  - job-ttl-webhook-service.job-ttl-system
+  - job-ttl-webhook-service.job-ttl-system.svc
+  - job-ttl-webhook-service.job-ttl-system.svc.cluster.local
+  issuerRef:
+    kind: Issuer
+    name: job-ttl-selfsigned-issuer
+  secretName: webhook-server-cert
+---
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: job-ttl-selfsigned-issuer
+  namespace: job-ttl-system
+spec:
+  selfSigned: {}

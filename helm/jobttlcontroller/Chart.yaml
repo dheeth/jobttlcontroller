@@ -1,0 +1,19 @@
+apiVersion: v2
+name: jobttlcontroller
+description: A Helm chart for JobTTLController - Kubernetes webhook to set TTL for Jobs
+type: application
+version: 1.0.0
+appVersion: "1.0.0"
+keywords:
+  - kubernetes
+  - jobs
+  - webhook
+  - controller
+home: https://github.com/dheeth/jobttlcontroller
+sources:
+  - https://github.com/dheeth/jobttlcontroller
+maintainers:
+  - name: Pawan Kumar
+    email: hey@dheeth.im
+annotations:
+  category: Infrastructure

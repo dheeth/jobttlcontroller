@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "jobttlcontroller.fullname" . }}-webhook-service
+  labels:
+    {{- include "jobttlcontroller.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: webhook-server
+      protocol: TCP
+      name: https
+  selector:
+    {{- include "jobttlcontroller.selectorLabels" . | nindent 4 }}
+---
+{{- if .Values.metrics.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "jobttlcontroller.fullname" . }}-metrics-service
+  labels:
+    {{- include "jobttlcontroller.labels" . | nindent 4 }}
+  {{- with .Values.metrics.service.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.metrics.service.type }}
+  ports:
+    - port: {{ .Values.metrics.service.port }}
+      targetPort: metrics
+      protocol: TCP
+      name: metrics
+  selector:
+    {{- include "jobttlcontroller.selectorLabels" . | nindent 4 }}
+{{- end }}

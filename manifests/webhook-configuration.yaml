@@ -1,0 +1,21 @@
+apiVersion: admissionregistration.k8s.io/v1
+kind: MutatingWebhookConfiguration
+metadata:
+  name: job-ttl-webhook-config
+webhooks:
+  - name: jobttlcontroller.io
+    clientConfig:
+      service:
+        name: job-ttl-webhook-service
+        namespace: job-ttl-system
+        path: "/mutate-batch-v1-jobs"
+        port: 443
+      caBundle: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUJJREFOQmdrcWhraUc5dzBCQVFFRkFBT0NBUThBTUlJQkNnS0NBUUVBMW5TNGhJV3YyYVpNMEl5T3Y4YWMKV2dLckJCZEtXT2F5NG5zQ25xb1Z2Z3V1b2I2KzZudHF4Mmt6WmlSZDlJcnVnazk5YVJ2dk5uczN0a3RBZQowdkV3WURxWUxhZ3h1WnE5b0xYN2x3K1dpaUU4Y3ZGK3NqY3ZXVXF0VzF0YXYzRFF4Wk9GN2dYcG5EClF5eG5uSjZHRzFaRDE0dU8xVlN4Z2JTMmhqL1hFRkJ6eTJxS3hRWWJ6UlpqUkVhRU5zT1l5STJ4aGUKdGlVQUk3S3hZUk5hU1lWNzZoUkpGWHpYV2V1Z2E5UVVHWnJ4NVhqeFdlUTdXOWRjdzVoYW5udk9wR3gKc3dXTk1VeG9YcXlBV2R3N3dTWFhGSTVlK2Q2czVlYkVjMXhVTW1Ia2l5bHNHTklMM1l4dm5UTlFUMgpnd2JlZ1d3SURBUUFCCi0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K
+    rules:
+      - operations: ["CREATE", "UPDATE"]
+        apiGroups: ["batch"]
+        apiVersions: ["v1"]
+        resources: ["jobs"]
+    failurePolicy: Fail
+    sideEffects: None
+    admissionReviewVersions: ["v1", "v1beta1"]

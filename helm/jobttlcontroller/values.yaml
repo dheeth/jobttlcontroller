@@ -1,0 +1,75 @@
+# Default values for jobttlcontroller
+replicaCount: 1
+
+image:
+  repository: jobttlcontroller
+  pullPolicy: IfNotPresent
+  tag: "latest"
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 65532
+  fsGroup: 65532
+
+securityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+    - ALL
+  readOnlyRootFilesystem: true
+  runAsNonRoot: true
+  runAsUser: 65532
+
+service:
+  type: ClusterIP
+  port: 443
+  targetPort: 9443
+
+resources:
+  limits:
+    cpu: 100m
+    memory: 128Mi
+  requests:
+    cpu: 10m
+    memory: 64Mi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+# Controller configuration
+controller:
+  targetTTL: 100
+  labelSelector: ""
+  
+# Webhook configuration
+webhook:
+  failurePolicy: Fail
+  namespaceSelector: {}
+  objectSelector: {}
+  
+# Metrics configuration
+metrics:
+  enabled: true
+  service:
+    type: ClusterIP
+    port: 8080
+    annotations: {}
+  
+# Health checks
+health:
+  enabled: true
+  port: 8081

@@ -1,0 +1,39 @@
+{{- $certs := include "jobttlcontroller.lookupAndGenerateCerts" . | fromYaml }}
+apiVersion: admissionregistration.k8s.io/v1
+kind: MutatingWebhookConfiguration
+metadata:
+  name: {{ include "jobttlcontroller.fullname" . }}-webhook-config
+  labels:
+    {{- include "jobttlcontroller.labels" . | nindent 4 }}
+webhooks:
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: {{ include "jobttlcontroller.fullname" . }}-webhook-service
+      namespace: {{ .Release.Namespace }}
+      path: /mutate-batch-v1-job
+      port: {{ .Values.service.port | default 443 }}
+    caBundle: {{ $certs.ca | b64enc }}
+  failurePolicy: {{ .Values.webhook.failurePolicy }}
+  matchPolicy: Equivalent
+  name: jobttlcontroller.dheeth.im
+  rules:
+  - apiGroups:
+    - batch
+    apiVersions:
+    - v1
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - jobs
+  sideEffects: None
+  {{- with .Values.webhook.namespaceSelector }}
+  namespaceSelector:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with .Values.webhook.objectSelector }}
+  objectSelector:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
