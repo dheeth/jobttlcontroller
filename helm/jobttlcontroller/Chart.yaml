@@ -2,8 +2,8 @@ apiVersion: v2
 name: jobttlcontroller
 description: A Helm chart for JobTTLController - Kubernetes webhook to set TTL for Jobs
 type: application
-version: 1.0.0
-appVersion: "1.0.0"
+version: 1.0.1
+appVersion: "1.0.1"
 keywords:
   - kubernetes
   - jobs
