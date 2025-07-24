@@ -29,13 +29,13 @@ The easiest way to install JobTTLController is using the Helm chart:
 
 ```bash
 # Add the Helm repository (if not already added)
-helm repo add jobttlcontroller https://your-repo-url.com
+helm repo add jobttlcontroller https://dheeth.github.io/jobttlcontroller
 
 # Install the chart
-helm install jobttlcontroller helm/jobttlcontroller \
+helm install jobttl-fix jobttlcontroller \
   --namespace jobttlcontroller-system \
   --create-namespace \
-  --set controller.targetTTL=3600 \
+  --set controller.targetTTL=100 \
   --set controller.labelSelector="ttl-controller=enabled"
 ```
 
@@ -59,7 +59,7 @@ helm install jobttlcontroller helm/jobttlcontroller \
 
 The controller can be configured using command-line arguments:
 
-- `--target-ttl`: Target TTL in seconds for jobs after they finish (default: 3600)
+- `--target-ttl`: Target TTL in seconds for jobs after they finish (default: 100)
 - `--label-selector`: Label selector to match jobs for TTL patching (default: "")
 - `--cert-dir`: Directory containing TLS certificates (default: "/tmp/k8s-webhook-server/serving-certs")
 - `--metrics-bind-address`: Address for metrics endpoint (default: ":8080")
