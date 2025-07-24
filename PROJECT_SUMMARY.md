@@ -98,18 +98,18 @@ kubectl apply -f manifests/
 
 ### 2. Helm Chart Deployment (Recommended)
 ```bash
-# Package the chart
-helm package helm/jobttlcontroller
+# Add the Helm repository (if not already added)
+helm repo add jobttlcontroller https://dheeth.github.io/jobttlcontroller
 
 # Install the chart
-helm install jobttl-fix helm/jobttlcontroller-*.tgz \
+helm install jobttl-fix jobttlcontroller \
   --namespace jobttlcontroller-system \
   --create-namespace \
-  --set controller.targetTTL=3600 \
+  --set controller.targetTTL=100 \
   --set controller.labelSelector="ttl-controller=enabled"
 
 # Upgrade the chart
-helm upgrade jobttl-fix helm/jobttlcontroller-*.tgz \
+helm upgrade jobttl-fix jobttlcontroller \
   --namespace jobttlcontroller-system
 
 # Uninstall the chart
