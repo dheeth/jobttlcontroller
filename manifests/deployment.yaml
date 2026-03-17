@@ -32,7 +32,7 @@ spec:
     spec:
       containers:
       - name: manager
-        image: jobttlcontroller:latest
+        image: dheeth/jobttlcontroller:9ea0847c-7cd2251c-507-7436
         imagePullPolicy: IfNotPresent
         command:
         - /manager
