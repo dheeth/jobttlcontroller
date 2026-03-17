@@ -2,9 +2,9 @@
 replicaCount: 1
 
 image:
-  repository: jobttlcontroller
+  repository: docker.io/dheeth/jobttlcontroller
   pullPolicy: IfNotPresent
-  tag: "latest"
+  tag: "9ea0847c-7cd2251c-507-7436"
 
 imagePullSecrets: []
 nameOverride: ""
